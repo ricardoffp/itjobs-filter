@@ -10,6 +10,7 @@
 // ==/UserScript==
 
 console.log('ITJobs Filter running!');
+var defaults = {"Rumos Serviços TI":true,"PrimeIT Consulting":true,"Experis":true,"Winprovit - Soluções Inteligentes":true,"Mind Source":true,"Closer":true,"BitSight":true,"Novabase Digital":true,"Growin - Know to grow":true,"Axians":true,"KWAN":true,"Smart Consulting":true,"Match Profiler":true,"SYSMATCH - Consultores de Sistemas de Informação":true,"Red IT":true,"Amaris":true,"Milestone Consulting":true,"NEOS - Integrated Solutions":true,"Crossjoin Solutions":true,"Aubay":true,"Novabase":true,"HCCM Consulting":true,"Bee Engineering - build together":true,"BOLD International":true,"KCS IT":true,"agap2IT":true,"Noesis Portugal - Consultadoria em Sistemas de Informação, SA":true,"worldIT - Sistemas de Informação":true,"Kelly IT Resources":true,"PTisp":true,"Randstad Portugal":true,"DMS":true,"Improove":true,"Upgrade m":true,"QiBit Portugal":true,"Altran":true,"KPMG":true,"Xpand IT":true,"Talenter":true,"Adentis":true,"Dellent Consulting":true,"Dixtior Consulting":true,"DECSKILL":true,"akapeople":true};
 
 (function (window, document) {
     'use strict';
@@ -63,6 +64,9 @@ console.log('ITJobs Filter running!');
 
         var init = function () {
             localStorageCache = localStorage.get();
+            if(Object.keys(localStorageCache).length === 0){
+                localStorageCache = defaults;
+            }
         };
 
         this.block = function (companyName) {
