@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ITJobs Filter
 // @namespace    https://github.com/ricardoffp
-// @version      1.0
+// @version      1.1
 // @description  Filters undesired companies of your choice from itjobs.pt jobs listing and search results.
 // @author       Ricardo Prates
 // @match        https://www.itjobs.pt/emprego*
@@ -89,8 +89,6 @@ console.log('ITJobs Filter running!');
      * Automatically returns the right string for the language in use.
      */
     var Translate = (function () {
-        var instance;
-
         var TRANSLATIONS = {
             closeButtonTitle: {
                 en: 'Hide job offers from ',
@@ -363,6 +361,19 @@ console.log('ITJobs Filter running!');
                     '</button>';
         };
 
+        var getPlaceholderLogo = function ($li) {
+            var $listNameLink = $li.find('.list-name a');
+
+            var title = $listNameLink.attr('title');
+            var href = $listNameLink.attr('href');
+
+            return '<div class="responsive-container">' +
+                       '<div class="img-container">' +
+                           '<a title="' + title + '" href="' + href + '"></a>' +
+                       '</div>' +
+                   '</div>';
+        }
+
         var onBlockButtonClick = function (e) {
             e.stopPropagation();
             var $clicked = $(this);
@@ -382,7 +393,17 @@ console.log('ITJobs Filter running!');
                 if ($block.hasClass('promoted')) {
                     $items = $block.find('.promoted-content .img-container a');
                 } else {
-                    $items = $block.find('li .img-container a');
+                    $items = $block
+                        .find('li')
+                        .prepend(function () {
+                            var $li = $(this);
+
+                            // Append a placeholder logo if company has none.
+                            if (!$li.find('.responsive-container').length) {
+                                return $(getPlaceholderLogo($li));
+                            }
+                        })
+                        .find('.img-container a')
                 }
 
                 $items.each(function () {
